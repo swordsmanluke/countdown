@@ -164,11 +164,11 @@ impl Counterdowner {
 type TimeUnit = (Regex, i32);
 
 fn parse_dur_str(dur_str: &String) -> Duration {
-    let HOURS: Regex = Regex::new("(\\d+)[hH]").unwrap();
-    let MINUTES: Regex = Regex::new("(\\d+)[mM]").unwrap();
-    let SECONDS: Regex = Regex::new("(\\d+)[sS]").unwrap();
+    let hours: Regex = Regex::new("(\\d+)[hH]").unwrap();
+    let minutes: Regex = Regex::new("(\\d+)[mM]").unwrap();
+    let seconds: Regex = Regex::new("(\\d+)[sS]").unwrap();
 
-    let timeunits: Vec<TimeUnit> = vec![(HOURS, 3600), (MINUTES, 60), (SECONDS, 1)];
+    let timeunits: Vec<TimeUnit> = vec![(hours, 3600), (minutes, 60), (seconds, 1)];
 
     let mut dur_s = 0;
 
