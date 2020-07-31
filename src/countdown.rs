@@ -33,27 +33,30 @@ pub enum CountdownCommand {
     Cancel { name: String }
 }
 
+impl CountdownCommand {
+    fn from_args(command: String, args: &mut Args) -> CountdownCommand {
+        match command.as_str() {
+            "add" => {
+                let mut str_args = args.collect::<Vec<String>>();
+                let dur_str = str_args.remove(str_args.len() - 1);
+                let name = str_args.join(" ");
+                let duration = parse_dur_str(&dur_str);
+                AddNew { name: name, duration: duration }
+            },
+            "cancel" => {
+                let name = args.collect::<Vec<String>>().join(" ");
+                Cancel { name: name }
+            },
+            _ => { DisplayAll }
+        }
+    }
+}
+
 impl From<Args> for CountdownCommand {
     fn from(mut args: Args) -> Self {
         match args.next() {
-            None => DisplayAll,
-            Some(command) => {
-                match command.as_str() {
-                    "add" => {
-                        let mut str_args = args.collect::<Vec<String>>();
-                        let dur_str = str_args.remove(str_args.len() - 1);
-                        let name = str_args.join(" ");
-                        let duration = parse_dur_str(&dur_str);
-                        AddNew {name: name, duration: duration }
-                    },
-                    "cancel" => {
-                        let mut str_args = args.collect::<Vec<String>>();
-                        let name = str_args.join(" ");
-                        Cancel {name: name }
-                    },
-                    _ => { DisplayAll }
-                }
-            }
+            Some(command) => CountdownCommand::from_args(command, &mut args),
+            None => DisplayAll
         }
     }
 }
